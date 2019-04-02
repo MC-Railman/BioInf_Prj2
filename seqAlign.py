@@ -94,6 +94,31 @@ match = 1
 matrix = numpy.empty([1702,1763])
 alignment = ""
 
+# Initialize first row with gaps
+for i in range(0,1702):
+        matrix[i][0] = i * gap
+
+y = 0
+# Fill in the scoring matrix for global alignment
+for g2 in gene2:
+        y += 1                  # increment row
+        x = 0                   # reset to first column column
+        matrix[x][y] = y * gap  # put gap in first column
+        for g1 in gene1:
+                x += 1          # increment column
+                if g1 == g2:                                            # if match add match
+                        matrix[x][y] = matrix[x - 1][y - 1] + match
+                else:                                                   # else choose the largest of a gap or a mismatch
+                        gap1 = matrix[x][y - 1] + gap
+                        gap2 = matrix[x - 1][y] + gap
+                        mis = matrix[x - 1][y - 1] + mismatch
+                        if (gap1 > gap2) and (gap1 > mis):
+                                matrix[x][y] = gap1
+                        elif (gap2 > gap1) and (gap2 > mis):
+                                matrix[x][y] = gap2
+                        else:
+                                matrix[x][y] = mis
+
 #TODO fill the alignment using the scoring values. We can use a nester for-loop for this, and fill it like we did with the ones in class
 # If this is a terrible idea and there's an easier way to do this, feel free to dump my stuff I have here xD - Tristan
 
