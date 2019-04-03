@@ -128,6 +128,13 @@ print("Done!")
 print(alignment1)
 print(alignment2)
 
+# Write alignments to file for easy comparing
+f = open("Aligned_Sequences.txt", "w")
+f.write(alignment1)
+f.write("\n\n")
+f.write(alignment2)
+f.close()
+
 # BLASTn results from
 # https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE=MegaBlast&PROGRAM=blastn&BLAST_PROGRAMS=megaBlast&PAGE_TYPE=BlastSearch&BLAST_SPEC=blast2seq&DATABASE=n/a&QUERY=&SUBJECTS=
 # For box 1 enter "NC_026433.1" and for box 2 enter "NC_007366.1", then select "Somewhat similar sequences" below and BLAST
