@@ -92,7 +92,8 @@ match = 1
 # Creates an EMPTY 1702 x 1763 matrix for scoring (one extra than the length for the first row comparing the sequences to nothing
 # Use this like matrix[0][0] for the first entry, matrix[0][1] for the one below it, and matrix[1][0] for the one beside
 matrix = numpy.empty([1702,1763])
-alignment = ""
+alignment1 = ""
+alignment2 = ""
 
 # Initialize first row with gaps
 for i in range(0,1702):
@@ -119,9 +120,24 @@ for g2 in gene2:
                         else:
                                 matrix[x][y] = mis
 
-#TODO fill the alignment using the scoring values. We can use a nester for-loop for this, and fill it like we did with the ones in class
-# If this is a terrible idea and there's an easier way to do this, feel free to dump my stuff I have here xD - Tristan
+# Find the optimal alignment of the two sequences
+while x != 0 or y != 0:
+        if gene1[x - 1] == gene2[y - 1] or (matrix[x][y] - mismatch) == matrix[x - 1][y - 1]:
+                alignment1 = gene1[x - 1] + alignment1          # add base to alignmnent
+                alignment2 = gene2[y - 1] + alignment2          # add base to alignment
+                x -= 1                                          # move left in matrix
+                y -= 1                                          # move up in matrix
+        elif (matrix[x][y] - gap) == matrix[x][y - 1]:
+                alignment1 = "-" + alignment1                   # add gap to alignment
+                alignment2 = gene2[y - 1] + alignment2          # add base to alignment
+                y -= 1                                          # move up in matrix
+        elif (matrix[x][y] - gap) == matrix[x - 1][y]:
+                alignment1 = gene1[x - 1] + alignment1          # add base to alignment
+                alignment2 = "-" + alignment2                   # add gap to alignment
+                x -= 1                                          # move left in matrix
 
+print(alignment1)
+print(alignment2)
 
 #TODO compare our sequence alignment to BLAST on the genbank website
 
