@@ -70,35 +70,22 @@ gene2 = "agcaaaagcaggggataattctattaaccatgaagactatcattgctttgagctacattc" \
         "tcatgtgggcctgccaaaaaggcaacattaggtgcaacatttgcatttgagtgcattaat" \
         "taaaaacacccttgtttctact"
 
-print(gene1)
-print(len(gene1))
-print(gene2)
-print(len(gene2))
-
-
-#TODO implement global/semi-global/local alignment between the two sequences
-# Global alignment might be better with such a large gene sequence. It starts at the end instead of the highest
-# score in the matrix. We wouldn't need to make pointers or anything, just compare the values around the current one
-# to select a match and go. Only limitation i see if the processing power and memory in our computers to do a
-# 1701 x 1762 matrix of numbers.. lol
-# Going to start with a global alignment and see if I regret my decisions later.. - Tristan
-
 # Variables for scoring
 gap = -2
 mismatch = -1
 match = 1
 
-# Global alignment matrix. Had to use numpy for this.
-# Creates an EMPTY 1702 x 1763 matrix for scoring (one extra than the length for the first row comparing the sequences to nothing
-# Use this like matrix[0][0] for the first entry, matrix[0][1] for the one below it, and matrix[1][0] for the one beside
+# Uses numpy to create an empty 1702x1763 matrix to represent our sequence scoring matrix
 matrix = numpy.empty([1702,1763])
 alignment1 = ""
 alignment2 = ""
 
+print("Creating matrix...")
 # Initialize first row with gaps
 for i in range(0,1702):
         matrix[i][0] = i * gap
 
+print("Processing matrix scores...")
 y = 0
 # Fill in the scoring matrix for global alignment
 for g2 in gene2:
@@ -120,6 +107,7 @@ for g2 in gene2:
                         else:
                                 matrix[x][y] = mis
 
+print("Aligning sequences...")
 # Find the optimal alignment of the two sequences
 while x != 0 or y != 0:
         if gene1[x - 1] == gene2[y - 1] or (matrix[x][y] - mismatch) == matrix[x - 1][y - 1]:
@@ -136,10 +124,18 @@ while x != 0 or y != 0:
                 alignment2 = "-" + alignment2                   # add gap to alignment
                 x -= 1                                          # move left in matrix
 
+print("Done!")
 print(alignment1)
 print(alignment2)
 
-#TODO compare our sequence alignment to BLAST on the genbank website
+# BLASTn results from
+# https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE=MegaBlast&PROGRAM=blastn&BLAST_PROGRAMS=megaBlast&PAGE_TYPE=BlastSearch&BLAST_SPEC=blast2seq&DATABASE=n/a&QUERY=&SUBJECTS=
+# For box 1 enter "NC_026433.1" and for box 2 enter "NC_007366.1", then select "Somewhat similar sequences" below and BLAST
+rangeBLAST = "954 to 1569"
+scoreBLAST = "65.3"
+expectBLAST = "1e-13"
+identitiesBLAST = "400/629 (64%)"
+gapsBLAST = "23/629 (3%)"
 
 #TODO count # of mutations: indels, synonymous mutations, nonsynonymous mutations, and other stuff
 
