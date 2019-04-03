@@ -73,12 +73,16 @@ gene2 = "agcaaaagcaggggataattctattaaccatgaagactatcattgctttgagctacattc" \
 
 # Refactored write output to file function
 def writeToFile(alignment1, alignment2):
+    numberOfIndels1 = 0
+    numberOfIndels2 = 0
     f = open("Aligned_Sequences.txt", "w")
     counter = 0
     counter2 = 0
     c = 0
     for r in range(0, len(alignment1)):
         f.write(alignment1[r])
+        if alignment1[r] == "-":
+            numberOfIndels1 += 1
         counter += 1
         if counter == 10:
             f.write(" ")
@@ -86,6 +90,8 @@ def writeToFile(alignment1, alignment2):
             f.write("\n")
             while c < r or c == r:
                 f.write(alignment2[c])
+                if alignment2[c] == "-":
+                    numberOfIndels2 += 1
                 c += 1
                 counter2 += 1
                 if counter2 == 10:
@@ -95,6 +101,8 @@ def writeToFile(alignment1, alignment2):
             counter = 0
             counter2 = 0
             f.write("\n")
+    f.write("\n\nIndels, sequence 1: " + str(numberOfIndels1) + "\n")
+    f.write("Indels, sequence 2: " + str(numberOfIndels2) + "\n")
     f.close()
 
 # Returns amino acid based on sequence of three codons
