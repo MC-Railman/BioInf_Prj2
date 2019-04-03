@@ -97,6 +97,51 @@ def writeToFile(alignment1, alignment2):
             f.write("\n")
     f.close()
 
+# Returns amino acid based on sequence of three codons
+def codon(seq):
+        if seq == "ttt" or seq == "ttc":
+                return "Phe"
+        elif seq == "tta" or seq == "ttg" or seq == "ctt" or seq == "ctc" or seq == "cta" or seq == "ctg":
+                return "Leu"
+        elif seq == "tct" or seq == "tcc" or seq == "tca" or seq == "tcg" or seq == "agt" or seq == "agc":
+                return "Ser"
+        elif seq == "tat" or seq == "tac":
+                return "Tyr"
+        elif seq == "tgt" or seq == "tgc":
+                return "Cys"
+        elif seq == "tgg":
+                return "Trp"
+        elif seq == "cct" or seq == "ccc" or seq == "cca" or seq == "ccg":
+                return "Pro"
+        elif seq == "cat" or seq == "cac":
+                return "His"
+        elif seq == "caa" or seq == "cag":
+                return "Gln"
+        elif seq == "cgt" or seq == "cgc" or seq == "cga" or seq == "cgg" or seq == "aga" or seq == "agg":
+                return "Arg"
+        elif seq == "att" or seq == "atc" or seq == "ata":
+                return "Ile"
+        elif seq == "atg":
+                return "Met"
+        elif seq == "act" or seq == "acc" or seq == "aca" or seq == "acg":
+                return "Thr"
+        elif seq == "aat" or seq == "aac":
+                return "Asn"
+        elif seq == "aaa" or seq == "aag":
+                return "Lys"
+        elif seq == "gtt" or seq == "gtc" or seq == "gta" or seq == "gtg":
+                return "Val"
+        elif seq == "gct" or seq == "gcc" or seq == "gca" or seq == "gcg":
+                return "Ala"
+        elif seq == "gat" or seq == "gac":
+                return "Asp"
+        elif seq == "gaa" or seq == "gag":
+                return "Glu"
+        elif seq == "ggt" or seq == "ggc" or seq == "gga" or seq == "ggg":
+                return "Gly"
+        elif seq == "taa" or seq == "tag" or seq == "tga":
+                return "STOP"
+
 # Variables for scoring
 gap = -2
 mismatch = -1
@@ -166,6 +211,61 @@ scoreBLAST = "65.3"
 expectBLAST = "1e-13"
 identitiesBLAST = "400/629 (64%)"
 gapsBLAST = "23/629 (3%)"
+
+counter = 0
+synonymous1 = 0
+nonsynonymous1 = 0
+while counter < (len(alignment1) - 2):
+        sequence1 = alignment1[counter] + alignment1[counter + 1] + alignment1[counter + 2]
+        mutation1 = alignment2[counter] + alignment1[counter + 1] + alignment1[counter + 2]
+        mutation2 = alignment1[counter] + alignment2[counter + 1] + alignment1[counter + 2]
+        mutation3 = alignment1[counter] + alignment1[counter + 1] + alignment2[counter + 2]
+        if codon(sequence1) == codon(mutation1) and codon(sequence1) != "None" and codon(mutation1) != "None":
+                if alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
+                        synonymous1 += 1
+        elif alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
+                nonsynonymous1 += 1
+        if codon(sequence1) == codon(mutation2) and codon(sequence1) != "None" and codon(mutation2) != "None":
+                if alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
+                        synonymous1 += 1
+        elif alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
+                nonsynonymous1 += 1
+        if codon(sequence1) == codon(mutation3) and codon(sequence1) != "None" and codon(mutation3) != "None":
+                if alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
+                        synonymous1 += 1
+        elif alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
+                nonsynonymous1 += 1
+        counter += 3
+
+counter = 0
+synonymous2 = 0
+nonsynonymous2 = 0
+while counter < (len(alignment2) - 2):
+        sequence2 = alignment2[counter] + alignment2[counter + 1] + alignment2[counter + 2]
+        mutation1 = alignment1[counter] + alignment2[counter + 1] + alignment2[counter + 2]
+        mutation2 = alignment2[counter] + alignment1[counter + 1] + alignment2[counter + 2]
+        mutation3 = alignment2[counter] + alignment2[counter + 1] + alignment1[counter + 2]
+        if codon(sequence2) == codon(mutation1) and codon(sequence2) != "None" and codon(mutation1) != "None":
+                if alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
+                        synonymous2 += 1
+        elif alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
+                nonsynonymous2 += 1
+        if codon(sequence2) == codon(mutation2) and codon(sequence2) != "None" and codon(mutation2) != "None":
+                if alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
+                        synonymous1 += 1
+        elif alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
+                nonsynonymous2 += 1
+        if codon(sequence2) == codon(mutation3) and codon(sequence2) != "None" and codon(mutation3) != "None":
+                if alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
+                        synonymous2 += 1
+        elif alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
+                nonsynonymous2 += 1
+        counter += 3
+
+print(synonymous1)
+print(nonsynonymous1)
+print(synonymous2)
+print(nonsynonymous2)
 
 #TODO count # of mutations: indels, synonymous mutations, nonsynonymous mutations, and other stuff
 
