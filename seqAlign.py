@@ -132,18 +132,26 @@ print(alignment2)
 # Write alignments to file for easy comparing
 f = open("Aligned_Sequences.txt", "w")
 counter = 0
+counter2 = 0
 c = 0
 for r in range(0, len(alignment1)):
     f.write(alignment1[r])
     counter += 1
     if counter == 10:
+        f.write(" ")
+    if counter == 20:
         f.write("\n")
         while c < r or c == r:
             f.write(alignment2[c])
             c += 1
+            counter2 += 1
+            if counter2 == 10:
+                f.write(" ")
+            if counter2 == 20:
+                f.write("\n")
         counter = 0
-        #c += 1
-        f.write("\n\n")
+        counter2 = 0
+        f.write("\n")
 #f.write(alignment1)
 #f.write("\n\n")
 #f.write(alignment2)
