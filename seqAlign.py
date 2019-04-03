@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # A sequence aligning program for Dr. Duan's Bioinformatics class
 # Written by Tristan Hess, Scott Owens, and Ryan Weston
 
@@ -130,9 +131,22 @@ print(alignment2)
 
 # Write alignments to file for easy comparing
 f = open("Aligned_Sequences.txt", "w")
-f.write(alignment1)
-f.write("\n\n")
-f.write(alignment2)
+counter = 0
+c = 0
+for r in range(0, len(alignment1)):
+    f.write(alignment1[r])
+    counter += 1
+    if counter == 10:
+        f.write("\n")
+        while c < r or c == r:
+            f.write(alignment2[c])
+            c += 1
+        counter = 0
+        #c += 1
+        f.write("\n\n")
+#f.write(alignment1)
+#f.write("\n\n")
+#f.write(alignment2)
 f.close()
 
 # BLASTn results from
