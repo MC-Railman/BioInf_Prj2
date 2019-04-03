@@ -71,6 +71,32 @@ gene2 = "agcaaaagcaggggataattctattaaccatgaagactatcattgctttgagctacattc" \
         "tcatgtgggcctgccaaaaaggcaacattaggtgcaacatttgcatttgagtgcattaat" \
         "taaaaacacccttgtttctact"
 
+# Refactored write output to file function
+def writeToFile(alignment1, alignment2):
+    f = open("Aligned_Sequences.txt", "w")
+    counter = 0
+    counter2 = 0
+    c = 0
+    for r in range(0, len(alignment1)):
+        f.write(alignment1[r])
+        counter += 1
+        if counter == 10:
+            f.write(" ")
+        if counter == 20:
+            f.write("\n")
+            while c < r or c == r:
+                f.write(alignment2[c])
+                c += 1
+                counter2 += 1
+                if counter2 == 10:
+                    f.write(" ")
+                if counter2 == 20:
+                    f.write("\n")
+            counter = 0
+            counter2 = 0
+            f.write("\n")
+    f.close()
+
 # Variables for scoring
 gap = -2
 mismatch = -1
@@ -130,32 +156,33 @@ print(alignment1)
 print(alignment2)
 
 # Write alignments to file for easy comparing
-f = open("Aligned_Sequences.txt", "w")
-counter = 0
-counter2 = 0
-c = 0
-for r in range(0, len(alignment1)):
-    f.write(alignment1[r])
-    counter += 1
-    if counter == 10:
-        f.write(" ")
-    if counter == 20:
-        f.write("\n")
-        while c < r or c == r:
-            f.write(alignment2[c])
-            c += 1
-            counter2 += 1
-            if counter2 == 10:
-                f.write(" ")
-            if counter2 == 20:
-                f.write("\n")
-        counter = 0
-        counter2 = 0
-        f.write("\n")
+writeToFile(alignment1, alignment2)
+#f = open("Aligned_Sequences.txt", "w")
+#counter = 0
+#counter2 = 0
+#c = 0
+#for r in range(0, len(alignment1)):
+#    f.write(alignment1[r])
+#    counter += 1
+#    if counter == 10:
+#            f.write(" ")
+#    if counter == 20:
+#        f.write("\n")
+#        while c < r or c == r:
+#            f.write(alignment2[c])
+#            c += 1
+#            counter2 += 1
+#            if counter2 == 10:
+#                f.write(" ")
+#            if counter2 == 20:
+#                f.write("\n")
+#        counter = 0
+#        counter2 = 0
+#        f.write("\n")
 #f.write(alignment1)
 #f.write("\n\n")
 #f.write(alignment2)
-f.close()
+#f.close()
 
 # BLASTn results from
 # https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE=MegaBlast&PROGRAM=blastn&BLAST_PROGRAMS=megaBlast&PAGE_TYPE=BlastSearch&BLAST_SPEC=blast2seq&DATABASE=n/a&QUERY=&SUBJECTS=
