@@ -73,37 +73,104 @@ gene2 = "agcaaaagcaggggataattctattaaccatgaagactatcattgctttgagctacattc" \
 
 # Refactored write output to file function
 def writeToFile(alignment1, alignment2):
-    numberOfIndels1 = 0
-    numberOfIndels2 = 0
-    f = open("Aligned_Sequences.txt", "w")
-    counter = 0
-    counter2 = 0
-    c = 0
-    for r in range(0, len(alignment1)):
-        f.write(alignment1[r])
-        if alignment1[r] == "-":
-            numberOfIndels1 += 1
-        counter += 1
-        if counter == 10:
-            f.write(" ")
-        if counter == 20:
-            f.write("\n")
-            while c < r or c == r:
-                f.write(alignment2[c])
-                if alignment2[c] == "-":
-                    numberOfIndels2 += 1
-                c += 1
-                counter2 += 1
-                if counter2 == 10:
-                    f.write(" ")
-                if counter2 == 20:
-                    f.write("\n")
-            counter = 0
-            counter2 = 0
-            f.write("\n")
-    f.write("\n\nIndels, sequence 1: " + str(numberOfIndels1) + "\n")
-    f.write("Indels, sequence 2: " + str(numberOfIndels2) + "\n")
-    f.close()
+        numberOfIndels1 = 0
+        numberOfIndels2 = 0
+        f = open("Aligned_Sequences.txt", "w")
+        counter = 0
+        counter2 = 0
+        c = 0
+        for r in range(0, len(alignment1)):
+                f.write(alignment1[r])
+                if alignment1[r] == "-":
+                        numberOfIndels1 += 1
+                counter += 1
+                if counter == 10:
+                        f.write(" ")
+                if counter == 20:
+                        f.write("\n")
+                        while c < r or c == r:
+                                f.write(alignment2[c])
+                                if alignment2[c] == "-":
+                                        numberOfIndels2 += 1
+                                c += 1
+                                counter2 += 1
+                                if counter2 == 10:
+                                        f.write(" ")
+                                if counter2 == 20:
+                                        f.write("\n")
+                        counter = 0
+                        counter2 = 0
+                        f.write("\n")
+        counter = 0
+        synonymous1 = 0
+        nonsynonymous1 = 0
+        while counter < (len(alignment1) - 2):
+                sequence1 = alignment1[counter] + alignment1[counter + 1] + alignment1[counter + 2]
+                mutation1 = alignment2[counter] + alignment1[counter + 1] + alignment1[counter + 2]
+                mutation2 = alignment1[counter] + alignment2[counter + 1] + alignment1[counter + 2]
+                mutation3 = alignment1[counter] + alignment1[counter + 1] + alignment2[counter + 2]
+                if codon(sequence1) == codon(mutation1) and codon(sequence1) != "None" and codon(mutation1) != "None":
+                        if alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[
+                                counter] != "-":
+                                synonymous1 += 1
+                elif alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[
+                        counter] != "-":
+                        nonsynonymous1 += 1
+                if codon(sequence1) == codon(mutation2) and codon(sequence1) != "None" and codon(mutation2) != "None":
+                        if alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and \
+                                alignment2[counter + 1] != "-":
+                                synonymous1 += 1
+                elif alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and \
+                        alignment2[counter + 1] != "-":
+                        nonsynonymous1 += 1
+                if codon(sequence1) == codon(mutation3) and codon(sequence1) != "None" and codon(mutation3) != "None":
+                        if alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and \
+                                alignment2[counter + 2] != "-":
+                                synonymous1 += 1
+                elif alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and \
+                        alignment2[counter + 2] != "-":
+                        nonsynonymous1 += 1
+                counter += 3
+
+        counter = 0
+        synonymous2 = 0
+        nonsynonymous2 = 0
+        while counter < (len(alignment2) - 2):
+                sequence2 = alignment2[counter] + alignment2[counter + 1] + alignment2[counter + 2]
+                mutation1 = alignment1[counter] + alignment2[counter + 1] + alignment2[counter + 2]
+                mutation2 = alignment2[counter] + alignment1[counter + 1] + alignment2[counter + 2]
+                mutation3 = alignment2[counter] + alignment2[counter + 1] + alignment1[counter + 2]
+                if codon(sequence2) == codon(mutation1) and codon(sequence2) != "None" and codon(mutation1) != "None":
+                        if alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[
+                                counter] != "-":
+                                synonymous2 += 1
+                elif alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[
+                        counter] != "-":
+                        nonsynonymous2 += 1
+                if codon(sequence2) == codon(mutation2) and codon(sequence2) != "None" and codon(mutation2) != "None":
+                        if alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and \
+                                alignment2[counter + 1] != "-":
+                                synonymous1 += 1
+                elif alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and \
+                        alignment2[counter + 1] != "-":
+                        nonsynonymous2 += 1
+                if codon(sequence2) == codon(mutation3) and codon(sequence2) != "None" and codon(mutation3) != "None":
+                        if alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and \
+                                alignment2[counter + 2] != "-":
+                                synonymous2 += 1
+                elif alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and \
+                        alignment2[counter + 2] != "-":
+                        nonsynonymous2 += 1
+                counter += 3
+
+        f.write("\n\nIndels, sequence 1: " + str(numberOfIndels1) + "\n")
+        f.write("Indels, sequence 2: " + str(numberOfIndels2) + "\n")
+        f.write("\nSynonymous, sequence 1: " + str(synonymous1) + "\n")
+        f.write("Synonymous, sequence 2: " + str(synonymous2) + "\n")
+        f.write("\nNonsynonymous, sequence 1: " + str(nonsynonymous1) + "\n")
+        f.write("Nonsynonymous, sequence 2: " + str(nonsynonymous2) + "\n")
+        f.close()
+        print("Output written to Aligned_Sequences.txt")
 
 # Returns amino acid based on sequence of three codons
 def codon(seq):
@@ -219,66 +286,3 @@ scoreBLAST = "65.3"
 expectBLAST = "1e-13"
 identitiesBLAST = "400/629 (64%)"
 gapsBLAST = "23/629 (3%)"
-
-counter = 0
-synonymous1 = 0
-nonsynonymous1 = 0
-while counter < (len(alignment1) - 2):
-        sequence1 = alignment1[counter] + alignment1[counter + 1] + alignment1[counter + 2]
-        mutation1 = alignment2[counter] + alignment1[counter + 1] + alignment1[counter + 2]
-        mutation2 = alignment1[counter] + alignment2[counter + 1] + alignment1[counter + 2]
-        mutation3 = alignment1[counter] + alignment1[counter + 1] + alignment2[counter + 2]
-        if codon(sequence1) == codon(mutation1) and codon(sequence1) != "None" and codon(mutation1) != "None":
-                if alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
-                        synonymous1 += 1
-        elif alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
-                nonsynonymous1 += 1
-        if codon(sequence1) == codon(mutation2) and codon(sequence1) != "None" and codon(mutation2) != "None":
-                if alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
-                        synonymous1 += 1
-        elif alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
-                nonsynonymous1 += 1
-        if codon(sequence1) == codon(mutation3) and codon(sequence1) != "None" and codon(mutation3) != "None":
-                if alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
-                        synonymous1 += 1
-        elif alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
-                nonsynonymous1 += 1
-        counter += 3
-
-counter = 0
-synonymous2 = 0
-nonsynonymous2 = 0
-while counter < (len(alignment2) - 2):
-        sequence2 = alignment2[counter] + alignment2[counter + 1] + alignment2[counter + 2]
-        mutation1 = alignment1[counter] + alignment2[counter + 1] + alignment2[counter + 2]
-        mutation2 = alignment2[counter] + alignment1[counter + 1] + alignment2[counter + 2]
-        mutation3 = alignment2[counter] + alignment2[counter + 1] + alignment1[counter + 2]
-        if codon(sequence2) == codon(mutation1) and codon(sequence2) != "None" and codon(mutation1) != "None":
-                if alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
-                        synonymous2 += 1
-        elif alignment1[counter] != alignment2[counter] and alignment1[counter] != "-" and alignment2[counter] != "-":
-                nonsynonymous2 += 1
-        if codon(sequence2) == codon(mutation2) and codon(sequence2) != "None" and codon(mutation2) != "None":
-                if alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
-                        synonymous1 += 1
-        elif alignment1[counter + 1] != alignment2[counter + 1] and alignment1[counter + 1] != "-" and alignment2[counter + 1] != "-":
-                nonsynonymous2 += 1
-        if codon(sequence2) == codon(mutation3) and codon(sequence2) != "None" and codon(mutation3) != "None":
-                if alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
-                        synonymous2 += 1
-        elif alignment1[counter + 2] != alignment2[counter + 2] and alignment1[counter + 2] != "-" and alignment2[counter + 2] != "-":
-                nonsynonymous2 += 1
-        counter += 3
-
-print(synonymous1)
-print(nonsynonymous1)
-print(synonymous2)
-print(nonsynonymous2)
-
-#TODO count # of mutations: indels, synonymous mutations, nonsynonymous mutations, and other stuff
-
-#TODO display data has a table
-
-#TODO each of us needs to write our own individual report using the data we find
-
-#TODO make a presentation for wednesday
